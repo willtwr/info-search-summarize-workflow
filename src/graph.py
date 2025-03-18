@@ -49,7 +49,7 @@ class WorkflowGraph:
         # tools
         tools = [news_search]
         tool_node = ToolNode(tools=tools)
-        # websearcher_agent.bind_tools(tools)
+        websearcher_agent.bind_tools(tools)
 
         graph_builder.add_node("websearcher", websearcher_agent)
         graph_builder.add_node("tools", tool_node)

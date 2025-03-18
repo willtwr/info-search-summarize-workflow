@@ -44,7 +44,27 @@ class WebSearcherAgent:
 
     def bind_tools(self, tools: list) -> None:
         """Bind tools for the agent to use"""
-        self.model = self.model.bind_tools(tools)
+        # self.model = self.model.bind_tools(tools)
+        functions = [
+            {
+                "type": "function",
+                "function": {
+                    "name": "news_search",
+                    "description": "Search news based on query",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "query": {"type": "string"}
+                        },
+                        "required": ["query"]
+                    }
+                }
+            }
+        ]
+        tools_str = "[" + ',\n'.join([json.dumps(func) for func in functions]) + "]"
+        print(tools_str)
+        self.sys_prompt = self.sys_prompt.replace("{tools}", tools_str)
+        print(self.sys_prompt)
 
     def invoke(self, state: MessagesState) -> dict:
         messages = [SystemMessage(self.sys_prompt)] + [msg for msg in state["messages"] if isinstance(msg, (HumanMessage, AIMessage))]

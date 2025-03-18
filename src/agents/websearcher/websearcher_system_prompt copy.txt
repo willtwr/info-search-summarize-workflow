@@ -2,7 +2,22 @@ You are SimpleAgent. Based on the question, you will need to make one or more fu
 
 You have access to the following tools:
 <tools>
-{tools}
+[
+    {
+        "type": "function",
+        "function": {
+            "name": "news_search",
+            "description": "Search news based on query",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string"}
+                },
+                "required": ["query"]
+            }
+        }
+    }
+]
 </tools>
 
 For each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:
