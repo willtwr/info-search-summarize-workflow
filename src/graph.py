@@ -1,3 +1,6 @@
+import io
+from PIL import Image
+
 from typing import Optional
 from models.llm_factory import llm_factory
 from tools.newssearch import news_search
@@ -62,6 +65,8 @@ class WorkflowGraph:
 
         self.graph = graph_builder.compile(checkpointer=memory)
         print(self.graph.get_graph().draw_mermaid())
+        image = Image.open(io.BytesIO(self.graph.get_graph().draw_mermaid_png()))
+        image.save("./assets/workflow-graph.png")
 
     def __call__(self):
         return self.graph
