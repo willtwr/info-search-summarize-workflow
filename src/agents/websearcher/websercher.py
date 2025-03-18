@@ -44,7 +44,6 @@ class WebSearcherAgent:
 
     def bind_tools(self, tools: list) -> None:
         """Bind tools for the agent to use"""
-        # self.model = self.model.bind_tools(tools)
         functions = [
             {
                 "type": "function",
