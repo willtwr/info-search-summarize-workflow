@@ -43,24 +43,24 @@ class WebSearcherAgent:
             self.model = llm
 
     def bind_tools(self, tools: list) -> None:
-        """Bind tools for the agent to use"""
+        """Add tools to system prompt"""
         functions = [
             {
                 "type": "function",
                 "function": {
-                    "name": "news_search",
-                    "description": "Search news based on query",
+                    "name": tool.name,
+                    "description": tool.description,
                     "parameters": {
                         "type": "object",
-                        "properties": {
-                            "query": {"type": "string"}
-                        },
-                        "required": ["query"]
+                        "properties": tool.args,
+                        "required": list(tool.args.keys())
                     }
                 }
             }
+            for tool in tools
         ]
-        tools_str = "[" + ',\n'.join([json.dumps(func) for func in functions]) + "]"
+
+        tools_str = "[" + ','.join([json.dumps(func) for func in functions]) + "]"
         print(tools_str)
         self.sys_prompt = self.sys_prompt.replace("{tools}", tools_str)
         print(self.sys_prompt)
