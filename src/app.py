@@ -39,10 +39,17 @@ def stream_user_message(message: str, chat_history: list):
 
 
 with gr.Blocks() as demo:
-    gr.Label("Bot")
-    chat = gr.Chatbot(type="messages")
-    msg = gr.Textbox(placeholder="Type your message here...", submit_btn=True)
-    msg.submit(stream_user_message, [msg, chat], [msg, chat], queue=False).then(stream_chat_graph_updates, chat, chat)
+    with gr.Row():
+        gr.Label("Bot")
+    
+    with gr.Row(equal_height=True):
+        with gr.Column():
+            chat = gr.Chatbot(type="messages")
+            msg = gr.Textbox(placeholder="Type your message here...", submit_btn=True)
+            msg.submit(stream_user_message, [msg, chat], [msg, chat], queue=False).then(stream_chat_graph_updates, chat, chat)
+
+        with gr.Column():
+            md = gr.Markdown("Content here...", container=True)
 
 
 if __name__ == "__main__":

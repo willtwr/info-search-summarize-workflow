@@ -21,7 +21,7 @@ class SmolLM2(BaseLLM):
             temperature=0.55,
             return_full_text=False
         )
-        self.smollm2pipe = HuggingFacePipeline(pipeline=pipe)
+        self.pipe = HuggingFacePipeline(pipeline=pipe)
 
     def get_pipe(self):
-        return self.smollm2pipe
+        return self.pipe

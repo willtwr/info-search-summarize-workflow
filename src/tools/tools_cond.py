@@ -5,7 +5,7 @@ from langchain_core.messages import AnyMessage
 
 def tools_condition(
     state: Union[list[AnyMessage], dict[str, Any], BaseModel],
-    messages_key: str = "messages",
+    messages_key: str = "messages"
 ) -> Literal["tools", "__end__"]:
     if isinstance(state, list):
         ai_message = state[-1]
