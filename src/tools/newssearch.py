@@ -12,8 +12,14 @@ def news_search(query: str) -> str:
 
     output = []
     for result in results:
-        response = requests.get(result['url'])
-        soup = BeautifulSoup(response.content, 'html.parser')
-        output.append(result['title'] + "\n" + soup.get_text().strip() + "\n")
+        try:
+            response = requests.get(result['url'], timeout=5)
+        except requests.exceptions.ReadTimeout:
+            output.append(result['title'] + "\n\n")
+            continue
+        finally:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            output.append("#" + result['title'] + "\n\n" + "\n\n".join([x for x in soup.get_text().strip().splitlines() if bool(x)]) + "\n\n")
 
-    return '\n'.join(output)
+    output = ''.join(output)
+    return output
