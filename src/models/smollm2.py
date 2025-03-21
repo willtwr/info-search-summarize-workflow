@@ -8,7 +8,7 @@ from langchain_huggingface import HuggingFacePipeline
 class SmolLM2(BaseLLM):
     """SmolLM 2 model"""
     def __init__(self):
-        self.build_pipe()
+        super().__init__()
 
     def build_pipe(self) -> None:
         pipe = pipeline(

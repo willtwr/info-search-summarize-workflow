@@ -7,7 +7,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 class Qwen(BaseLLM):
     """Qwen2.5-3B-Instruct-AWQ model"""
     def __init__(self):
-        self.build_pipe()
+        super().__init__()
 
     def build_pipe(self) -> None:
         model = AutoModelForCausalLM.from_pretrained(

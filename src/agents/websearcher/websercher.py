@@ -1,46 +1,22 @@
 import os
 import json
 import uuid
-from typing import Optional
-from models.llm_factory import llm_factory
-from langchain_core.language_models import BaseChatModel
+from agents.base_agent import BaseAgent
 from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
-from langchain_huggingface import ChatHuggingFace
 from langgraph.graph import MessagesState
 
 
-class WebSearcherAgent:
+class WebSearcherAgent(BaseAgent):
     """WebSearcher Agent"""
-    def __init__(
-            self, 
-            model_name: str = "qwen",
-            model: Optional[BaseChatModel] = None,
-            sys_prompt_path: Optional[str] = None
-    ):
-        # Initialize model
-        self.model_name = model_name
-        if model is None:
-            self.build_model()
-        else:
-            self.model = model
-
-        # Load system prompt
-        if sys_prompt_path is None:
-            sys_prompt_path = os.path.join(
+    def load_system_prompt(self) -> None:
+        if self.sysprompt_path is None:
+            self.sysprompt_path = os.path.join(
                 os.path.dirname(os.path.abspath(__file__)),
                 "websearcher_system_prompt.txt"
             )
 
-        with open(sys_prompt_path, "r") as file:
+        with open(self.sysprompt_path, "r") as file:
             self.sys_prompt = file.read()
-
-    def build_model(self) -> None:
-        """Build the LLM model"""
-        llm = llm_factory(self.model_name)
-        if not isinstance(llm, BaseChatModel):
-            self.model = ChatHuggingFace(llm=llm)
-        else:
-            self.model = llm
 
     def bind_tools(self, tools: list) -> None:
         """Add tools to system prompt"""
@@ -75,6 +51,3 @@ class WebSearcherAgent:
             output = {"messages": [AIMessage(content="", tool_calls=[{"name": content["name"], "args": content["arguments"], "type": "tool_call", "id": str(uuid.uuid4())} for content in contents])]}
 
         return output
-    
-    def __call__(self, state: MessagesState) -> dict:
-        return self.invoke(state)
