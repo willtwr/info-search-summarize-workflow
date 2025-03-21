@@ -9,6 +9,6 @@ models = {
 }
 
 
-def llm_factory(model_name="qwen"):
-    """Factory function for LLM models"""
+def llm_pipe_factory(model_name="qwen"):
+    """Factory function for LLM pipelines"""
     return models[model_name]().get_pipe()

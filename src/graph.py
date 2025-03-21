@@ -2,7 +2,7 @@ import io
 from PIL import Image
 
 from typing import Optional
-from models.llm_factory import llm_factory
+from models.llm_pipe_factory import llm_pipe_factory
 from tools.newssearch import news_search
 from tools.tools_cond import tools_condition
 from agents.websearcher.websercher import WebSearcherAgent
@@ -34,7 +34,7 @@ class WorkflowGraph:
 
     def build_model(self) -> None:
         """Build the LLM model"""
-        llm = llm_factory(self.model_name)
+        llm = llm_pipe_factory(self.model_name)
         if not isinstance(llm, BaseChatModel):
             self.model = ChatHuggingFace(llm=llm)
         else:

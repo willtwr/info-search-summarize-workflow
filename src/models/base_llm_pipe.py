@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 
 
-class BaseLLM(ABC):
-    """Abstract class for LLM model"""
+class BaseLLMPipe(ABC):
+    """Abstract class for LLM Pipelines"""
     def __init__(self):
         self.build_pipe()
 
@@ -10,6 +10,5 @@ class BaseLLM(ABC):
     def build_pipe(self):
         pass
     
-    @abstractmethod
     def get_pipe(self):
-        pass
+        return self.pipe

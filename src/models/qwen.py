@@ -1,14 +1,11 @@
-from .base_llm import BaseLLM
+from .base_llm_pipe import BaseLLMPipe
 import torch
 from langchain_huggingface import HuggingFacePipeline
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 
-class Qwen(BaseLLM):
+class Qwen(BaseLLMPipe):
     """Qwen2.5-3B-Instruct-AWQ model"""
-    def __init__(self):
-        super().__init__()
-
     def build_pipe(self) -> None:
         model = AutoModelForCausalLM.from_pretrained(
             "Qwen/Qwen2.5-3B-Instruct-AWQ", 
@@ -28,6 +25,3 @@ class Qwen(BaseLLM):
             return_full_text=False
         )
         self.pipe = HuggingFacePipeline(pipeline=pipe)
-
-    def get_pipe(self):
-        return self.pipe

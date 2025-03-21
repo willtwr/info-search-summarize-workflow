@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Optional
-from models.llm_factory import llm_factory
+from models.llm_pipe_factory import llm_pipe_factory
 from langchain_huggingface import ChatHuggingFace
 from langchain_core.language_models import BaseChatModel
 from langgraph.graph import MessagesState
@@ -32,7 +32,7 @@ class BaseAgent(ABC):
 
     def build_model(self) -> None:
         """Build the LLM model"""
-        llm = llm_factory(self.model_name)
+        llm = llm_pipe_factory(self.model_name)
         if isinstance(llm, BaseChatModel):
             self.model = llm
         else:
