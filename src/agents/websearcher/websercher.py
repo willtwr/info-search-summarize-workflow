@@ -37,10 +37,8 @@ class WebSearcherAgent(BaseAgent):
         ]
 
         tools_str = "[" + ','.join([json.dumps(func) for func in functions]) + "]"
-        print(tools_str)
         self.sys_prompt = self.sys_prompt.replace("{tools}", tools_str)
-        print(self.sys_prompt)
-
+        
     def invoke(self, state: MessagesState) -> dict:
         messages = [SystemMessage(self.sys_prompt)] + [msg for msg in state["messages"] if isinstance(msg, (HumanMessage, AIMessage))]
         output = {"messages": [self.model.invoke(messages)]}

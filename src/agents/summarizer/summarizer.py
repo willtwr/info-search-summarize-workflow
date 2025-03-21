@@ -1,7 +1,7 @@
 import os
 from agents.base_agent import BaseAgent
 from langchain_core.messages import AIMessage, HumanMessage
-from langchain_core.prompts import PromptTemplate, ChatPromptTemplate, HumanMessagePromptTemplate
+from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langgraph.graph import MessagesState
 
@@ -18,16 +18,9 @@ class SummarizerAgent(BaseAgent):
             )
 
         with open(self.sysprompt_path, "r") as f:
-            self.sys_prompt = ChatPromptTemplate(
+            self.sys_prompt = PromptTemplate(
                 input_variables=['context', 'question'], 
-                messages=[
-                    HumanMessagePromptTemplate(
-                        prompt=PromptTemplate(
-                            input_variables=['context', 'question'], 
-                            template=f.read()
-                        )
-                    )
-                ]
+                template=f.read()
             )
 
     def invoke(self, state: MessagesState) -> dict:
