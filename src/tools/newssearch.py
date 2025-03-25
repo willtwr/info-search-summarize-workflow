@@ -1,5 +1,5 @@
-from selenium import webdriver
 from duckduckgo_search import DDGS
+from selenium import webdriver
 from bs4 import BeautifulSoup
 from langchain.tools import tool
 
@@ -19,7 +19,6 @@ def news_search(query: str) -> str:
     for result in results:
         driver.get(result['url'])
         response = driver.page_source
-        print(response)
         soup = BeautifulSoup(response, 'html.parser')
         output.append("#" + result['title'] + "\n\n" + "\n\n".join([x for x in soup.get_text().strip().splitlines() if bool(x)]))
 
