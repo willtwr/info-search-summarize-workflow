@@ -1,3 +1,4 @@
+import re
 from duckduckgo_search import DDGS
 from selenium import webdriver
 from bs4 import BeautifulSoup
@@ -8,7 +9,7 @@ from langchain.tools import tool
 def news_search(query: str) -> str:
     """Searches news from the internet based on query."""
     with DDGS() as ddgs:
-        results = ddgs.news(query, max_results=5)
+        results = ddgs.news(query, max_results=10)
 
     output = []
     options = webdriver.ChromeOptions()
@@ -20,9 +21,10 @@ def news_search(query: str) -> str:
         driver.get(result['url'])
         response = driver.page_source
         soup = BeautifulSoup(response, 'html.parser')
-        output.append("#" + result['title'] + "\n\n" + "\n\n".join([x for x in soup.get_text().strip().splitlines() if bool(x)]))
+        content = "\n\n".join([x for x in soup.get_text().strip().splitlines() if bool(x)])
+        if len(re.findall(r'\b\w+\b', content)) > 20:
+            output.append("#" + result['title'] + "\n\n" + content)
 
     driver.quit()
-
     output = '\n\n'.join(output)
     return output
