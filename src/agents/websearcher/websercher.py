@@ -42,9 +42,8 @@ class WebSearcherAgent(BaseAgent):
     def invoke(self, state: MessagesState) -> dict:
         messages = [SystemMessage(self.sys_prompt)] + [msg for msg in state["messages"] if isinstance(msg, (HumanMessage, AIMessage))]
         output = {"messages": [self.model.invoke(messages)]}
-        print(output)
         if output["messages"][-1].content.startswith('<tool_call>'):
-            contents = output["messages"][-1].content.replace('<tool_call>\n', '').replace('\n</tool_call>', '')
+            contents = output["messages"][-1].content.replace('<tool_call>', '').replace('</tool_call>', '').strip()
             contents = json.loads(contents)
             output = {"messages": [AIMessage(content="", tool_calls=[{"name": content["name"], "args": content["arguments"], "type": "tool_call", "id": str(uuid.uuid4())} for content in contents])]}
 

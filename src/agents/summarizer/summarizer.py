@@ -24,22 +24,13 @@ class SummarizerAgent(BaseAgent):
             )
 
     def invoke(self, state: MessagesState) -> dict:
-        print("-----Summarize-----")
         messages = state["messages"]
-        print(messages)
-        
         for item in reversed(messages):
             if isinstance(item, HumanMessage):
                 question = item.content
                 break
         
-        print("___Question___")
-        print(question)
-
-        last_message = messages[-1]
-        docs = last_message.content
-        print("___Contents___")
-        print(docs)
+        docs = messages[-1].content
         
         # Chain
         summarize_chain = self.sys_prompt | self.model | StrOutputParser()
