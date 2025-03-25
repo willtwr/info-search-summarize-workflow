@@ -4,6 +4,7 @@ from PIL import Image
 from typing import Optional
 from models.llm_pipe_factory import llm_pipe_factory
 from tools.newssearch import news_search
+from tools.websearch import web_search
 from tools.tools_cond import tools_condition
 from agents.websearcher.websercher import WebSearcherAgent
 from agents.summarizer.summarizer import SummarizerAgent
@@ -50,7 +51,7 @@ class WorkflowGraph:
         summarizer_agent = SummarizerAgent(model=self.model)
 
         # tools
-        tools = [news_search]
+        tools = [news_search, web_search]
         tool_node = ToolNode(tools=tools)
         websearcher_agent.bind_tools(tools)
 
