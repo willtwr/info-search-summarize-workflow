@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Optional
-from models.llm_pipe_factory import llm_pipe_factory
+from models.llm.llm_pipe_factory import llm_pipe_factory
 from langchain_huggingface import ChatHuggingFace
 from langchain_core.language_models import BaseChatModel
 from langgraph.graph import MessagesState

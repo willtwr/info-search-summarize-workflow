@@ -2,7 +2,7 @@ import io
 from PIL import Image
 
 from typing import Optional
-from models.llm_pipe_factory import llm_pipe_factory
+from models.llm.llm_pipe_factory import llm_pipe_factory
 from tools.newssearch import news_search
 from tools.websearch import web_search
 from tools.tools_cond import tools_condition

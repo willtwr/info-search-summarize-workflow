@@ -7,7 +7,7 @@ from langchain.tools import tool
 
 @tool("web_search", return_direct=False)
 def web_search(query: str) -> str:
-    """Searches the internet for information that is not news based on query."""
+    """Useful for searching the web."""
     with DDGS() as ddgs:
         results = ddgs.text(query, max_results=10)
 

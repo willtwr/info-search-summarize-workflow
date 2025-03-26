@@ -7,7 +7,7 @@ from langchain.tools import tool
 
 @tool("news_search", return_direct=False)
 def news_search(query: str) -> str:
-    """Searches news from the internet based on query."""
+    """Useful for searching news."""
     with DDGS() as ddgs:
         results = ddgs.news(query, max_results=10)
 

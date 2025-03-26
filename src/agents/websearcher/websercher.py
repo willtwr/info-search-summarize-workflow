@@ -22,15 +22,11 @@ class WebSearcherAgent(BaseAgent):
         """Add tools to system prompt"""
         functions = [
             {
-                "type": "function",
-                "function": {
-                    "name": tool.name,
-                    "description": tool.description,
-                    "parameters": {
-                        "type": "object",
-                        "properties": tool.args,
-                        "required": list(tool.args.keys())
-                    }
+                "function_name": tool.name,
+                "description": tool.description,
+                "parameters": {
+                    "properties": tool.args,
+                    "required": list(tool.args.keys())
                 }
             }
             for tool in tools
@@ -38,6 +34,7 @@ class WebSearcherAgent(BaseAgent):
 
         tools_str = "[" + ','.join([json.dumps(func) for func in functions]) + "]"
         self.sys_prompt = self.sys_prompt.replace("{tools}", tools_str)
+        print(self.sys_prompt)
         
     def invoke(self, state: MessagesState) -> dict:
         messages = [SystemMessage(self.sys_prompt)] + [msg for msg in state["messages"] if isinstance(msg, (HumanMessage, AIMessage))]

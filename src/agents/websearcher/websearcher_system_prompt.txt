@@ -9,3 +9,5 @@ For each tool call, return a json object with function name and arguments within
 <tool_call>
 [{"name": "func_name1", "arguments": {"argument1": "value1", "argument2": "value2"}}]
 </tool_call>
+
+Make sure that the function name matches at least one of the function_name in <tools></tools>.
