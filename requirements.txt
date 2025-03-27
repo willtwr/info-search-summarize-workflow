@@ -6,3 +6,5 @@ beautifulsoup4==4.13.3
 duckduckgo-search==7.5.2
 accelerate==1.5.2
 autoawq==0.2.8
+chromadb==0.6.3
+langchain==0.2.2
