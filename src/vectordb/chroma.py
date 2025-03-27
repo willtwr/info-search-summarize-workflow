@@ -33,6 +33,7 @@ class ChromaVectorStore:
         return self.text_splitter.split_documents(docs)
     
     def read_pdf(self, path: str) -> List[Document]:
+        """Read PDF file and return list of pages"""
         doc = pymupdf.open(path)
         content = []
         for i, page in enumerate(doc):
