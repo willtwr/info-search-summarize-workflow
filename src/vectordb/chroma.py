@@ -5,6 +5,7 @@ from langchain_core.vectorstores import VectorStoreRetriever
 from langchain_chroma import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from models.text_embedding.stella import Stella
+import pymupdf
 
 
 class ChromaVectorStore:
@@ -30,6 +31,22 @@ class ChromaVectorStore:
 
     def _docs_splitter(self, docs: List[Document]) -> List[Document]:
         return self.text_splitter.split_documents(docs)
+    
+    def read_pdf(self, path: str) -> List[Document]:
+        doc = pymupdf.open(path)
+        content = []
+        for i, page in enumerate(doc):
+            content.append(
+                Document(
+                    page_content=page.get_text().encode("utf-8"),
+                    metadata={
+                        "source": path,
+                        "page": i
+                    }
+                )
+            )
+        
+        return content
 
     def add_documents(self, docs: List[Document]) -> None:
         doc_splits = self._docs_splitter(docs)
