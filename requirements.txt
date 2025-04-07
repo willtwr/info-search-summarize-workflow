@@ -9,3 +9,4 @@ autoawq==0.2.8
 chromadb==0.6.3
 langchain-chroma==0.2.2
 pymupdf==1.25.4
+tiktoken==0.9.0

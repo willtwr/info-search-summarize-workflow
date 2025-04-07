@@ -1,12 +1,17 @@
 import uuid
 import gradio as gr
 from graph import WorkflowGraph
+from vectordb.chroma import ChromaVectorStore
 
 
 config = {"configurable": {"thread_id": uuid.uuid4()}}
 
 # Initialize models here so that they are not loaded more than once.
 if gr.NO_RELOAD:
+    # Load the vector database
+    vectordb = ChromaVectorStore()
+
+    # Load the workflow graph
     workflow = WorkflowGraph(model_name="qwen")
 
 
@@ -38,18 +43,35 @@ def stream_user_message(message: str, chat_history: list):
     return "", chat_history
 
 
+def upload_document(uploaded_file: gr.UploadButton, progress=gr.Progress()):
+    """Upload documents to vector database"""
+    progress(0, desc="Reading document...")
+    doc = vectordb.read_pdf(uploaded_file.name)
+    progress(0.2, desc="Uploading document...")
+    vectordb.add_documents(doc)
+    progress(1, desc="Document uploaded successfully.")
+    return uploaded_file
+
+
 with gr.Blocks() as demo:
     with gr.Row():
         gr.Label("Bot")
     
     with gr.Row(equal_height=True):
         with gr.Column():
-            chat = gr.Chatbot(type="messages", scale=5)
-            msg = gr.Textbox(placeholder="Type your message here...", submit_btn=True, scale=1, lines=1, max_lines=2)
+            chat = gr.Chatbot(type="messages")
+
+            with gr.Row():
+                with gr.Column(scale=1):
+                    filebox = gr.File()
+                    upload_button = gr.UploadButton("Upload a PDF file", file_count="single", size="sm")
+                
+                msg = gr.Textbox(placeholder="Type your message here...", submit_btn=True, lines=1, max_lines=2, scale=9)
 
         with gr.Column():
             md = gr.Markdown("Content here...", container=True, height="75vh", max_height="75vh")
 
+    upload_button.upload(upload_document, [upload_button], [filebox], show_progress_on=filebox)
     msg.submit(stream_user_message, [msg, chat], [msg, chat], queue=False).then(stream_chat_graph_updates, [chat, md], [chat, md])
 
 

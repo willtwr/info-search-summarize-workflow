@@ -19,7 +19,7 @@ class ChromaVectorStore:
         # Create vector store. Change collection name for different tables
         self.vectorstore = Chroma(
             collection_name="documents",
-            collection_metadata={"type": "document"},
+            collection_metadata={"type": "pdf"},
             embedding_function=self.embedding_function,
             persist_directory="./chromadb"
         )
