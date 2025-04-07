@@ -37,6 +37,7 @@ class ChromaVectorStore:
         doc = pymupdf.open(path)
         content = []
         for i, page in enumerate(doc):
+            #TODO: Add last 128 tokens/words from previous page to the beginning of current page.
             content.append(
                 Document(
                     page_content=page.get_text().encode("utf-8"),
