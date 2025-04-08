@@ -12,7 +12,7 @@ if gr.NO_RELOAD:
     vectordb = ChromaVectorStore()
 
     # Load the workflow graph
-    workflow = WorkflowGraph(model_name="qwen")
+    workflow = WorkflowGraph(model_name="qwen", vectorstore=vectordb.get_retriever())
 
 
 def stream_chat_graph_updates(chat_history: list, markdown_box: str):

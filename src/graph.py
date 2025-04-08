@@ -5,6 +5,7 @@ from typing import Optional
 from models.llm.llm_pipe_factory import llm_pipe_factory
 from tools.newssearch import news_search
 from tools.websearch import web_search
+from tools.vector_store_retriever import build_my_budget_retriever
 from tools.tools_cond import tools_condition
 from agents.websearcher.websercher import WebSearcherAgent
 from agents.summarizer.summarizer import SummarizerAgent
@@ -14,6 +15,7 @@ from langchain_huggingface import ChatHuggingFace
 from langgraph.graph import MessagesState, StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import ToolNode
+from langchain_core.vectorstores import VectorStoreRetriever
 
 
 class WorkflowGraph:
@@ -21,7 +23,8 @@ class WorkflowGraph:
     def __init__(
             self,
             model_name: str = "qwen",
-            model: Optional[BaseChatModel] = None
+            model: Optional[BaseChatModel] = None,
+            vectorstore: Optional[VectorStoreRetriever] = None
     ):
         # Load model
         self.model_name = model_name
@@ -30,6 +33,9 @@ class WorkflowGraph:
         else:
             self.model = model
 
+        # Build vectorstore retriever
+        self.vectorstore_retriever = build_my_budget_retriever(vectorstore) if vectorstore else None
+        
         # Build workflow graph
         self.build_graph()
 
@@ -52,6 +58,9 @@ class WorkflowGraph:
 
         # tools
         tools = [news_search, web_search]
+        if self.vectorstore_retriever:
+            tools.append(self.vectorstore_retriever)
+
         tool_node = ToolNode(tools=tools)
         websearcher_agent.bind_tools(tools)
 

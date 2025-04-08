@@ -3,10 +3,10 @@ from langchain_core.vectorstores import VectorStoreRetriever
 from langchain_core.tools.simple import Tool
 
 
-def build_vector_store_retriever(retriever: VectorStoreRetriever) -> Tool:
+def build_my_budget_retriever(retriever: VectorStoreRetriever) -> Tool:
     vector_store_retriever = create_retriever_tool(
         retriever,
-        name="vector_store_retriever",
-        description="Information from documents",
+        name="malaysia_budget_data_retriever",
+        description="Tool for retrieving data regarding Malaysia's budget allocations, spending, subsidies, etc.",
     )
     return vector_store_retriever
