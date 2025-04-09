@@ -6,6 +6,17 @@ Sample workflow for information searching and summarization.
 - New search: search the web for news.
 - Document search: search content from documents via RAG. 
 
+## Use Cases and Tips
+- Documents searching
+  - Separate documents into different collections based on the type of documents
+  - Add metadata for each document for faster and more cost-effective fine-grained search.
+- Search information from the internet
+  - Whitelist trusted/targeted sites and blacklist the rest.
+  - Different web search tools that focus on different area of interest.
+- General requirements:
+  - Show link and/or path to the found context for verification.
+  - Summarizer (of different level) is useful for quick understanding of the retrieved content (should also be verified).
+
 ## Workflow Graph
 ![](./assets/workflow-graph.png)
 
