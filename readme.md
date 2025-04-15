@@ -5,6 +5,7 @@ Sample workflow for information searching and summarization.
 - Web search: search the web for information.
 - New search: search the web for news.
 - Document search: search content from documents via RAG. 
+- Read uploaded file: read from an uploaded file and answer questions. (TODO)
 
 ## Use Cases and Tips
 - Documents searching
@@ -30,3 +31,7 @@ Sample workflow for information searching and summarization.
 ## Installation (WIP)
 - Install chromedriver from [here](https://googlechromelabs.github.io/chrome-for-testing/)
   - Linux: copy chromedriver to /usr/bin/
+
+## Test / Evaluation
+- ROUGE (with or w/o embedding) score - for summarization
+- BLEU (with or w/o embedding) score - for translation
