@@ -7,7 +7,19 @@ from langchain.tools import tool
 
 @tool("news_search", return_direct=False)
 def news_search(query: str) -> str:
-    """Useful for searching news."""
+    """News-specific search tool for retrieving current information.
+    
+    This tool uses DuckDuckGo's news search to find recent articles and news content.
+    It processes each result using Selenium to extract the full article text while
+    filtering out short or irrelevant content.
+
+    Args:
+        query: The news search query to execute
+
+    Returns:
+        str: Concatenated content from relevant news articles, with each article
+             prefixed by its title
+    """
     with DDGS() as ddgs:
         results = ddgs.news(query, max_results=10)
 

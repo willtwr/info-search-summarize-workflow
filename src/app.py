@@ -1,22 +1,49 @@
+"""Main application module providing the Gradio web interface.
+
+This module implements the web interface for the information search and summarization
+workflow using Gradio. It provides a chat interface with document upload capabilities
+and real-time interaction with the workflow system.
+
+The interface allows users to:
+- Chat with the system to search for information
+- Upload PDF documents for vector store indexing
+- View search results and summaries in a split-panel interface
+"""
+
 import uuid
 import gradio as gr
 from graph import WorkflowGraph
 from vectordb.chroma import ChromaVectorStore
 
 
-config = {"configurable": {"thread_id": uuid.uuid4()}}
+config = {
+    "configurable": {
+        "thread_id": uuid.uuid4()  # Unique identifier for each chat session
+    }
+}
 
 # Initialize models here so that they are not loaded more than once.
 if gr.NO_RELOAD:
     # Load the vector database
     vectordb = ChromaVectorStore()
 
-    # Load the workflow graph
+    # Load the workflow graph with Qwen model and vector store retriever
     workflow = WorkflowGraph(model_name="qwen", vectorstore=vectordb.get_retriever())
 
 
 def stream_chat_graph_updates(chat_history: list, markdown_box: str):
-    """Update assistant chat here"""
+    """Update the chat interface with streaming responses from the workflow.
+
+    This function processes workflow updates in real-time, showing both the chatbot's
+    responses and any intermediate tool outputs.
+
+    Args:
+        chat_history: List of message dictionaries representing the chat history
+        markdown_box: Current content of the markdown display box
+
+    Yields:
+        Tuple of updated chat_history and markdown_box content
+    """
     for event in workflow().stream({"messages": [("user", chat_history[-1]["content"])]}, config, stream_mode="updates"):
         print("-----------event----------------")
         print(event)
@@ -38,13 +65,32 @@ def stream_chat_graph_updates(chat_history: list, markdown_box: str):
 
 
 def stream_user_message(message: str, chat_history: list):
-    """Update user chat here and clear textbox"""
+    """Add a user message to the chat history.
+
+    Args:
+        message: The user's input message
+        chat_history: Current chat history
+
+    Returns:
+        Tuple of empty string (to clear input) and updated chat history
+    """
     chat_history.append({"role": "user", "content": message})
     return "", chat_history
 
 
 def upload_document(uploaded_file: gr.UploadButton, progress=gr.Progress()):
-    """Upload documents to vector database"""
+    """Process and index an uploaded PDF document.
+
+    Reads the PDF file, splits it into chunks, and adds it to the vector store
+    for future retrieval.
+
+    Args:
+        uploaded_file: The uploaded PDF file information
+        progress: Gradio progress indicator
+
+    Returns:
+        The uploaded file information for display
+    """
     progress(0, desc="Reading document...")
     doc = vectordb.read_pdf(uploaded_file.name)
     progress(0.2, desc="Uploading document...")

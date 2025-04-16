@@ -19,13 +19,38 @@ from langchain_core.vectorstores import VectorStoreRetriever
 
 
 class WorkflowGraph:
-    """Workflow Graph"""
+    """Main workflow orchestrator for information search and summarization.
+
+    This class creates and manages the workflow graph that coordinates the interaction
+    between different components (agents, tools, and models) of the system. It uses
+    LangGraph for workflow management and supports both web search and vector store
+    retrieval capabilities.
+
+    The workflow consists of:
+    1. WebSearcher agent for query interpretation and tool selection
+    2. Tool execution nodes for information retrieval
+    3. Summarizer agent for condensing retrieved information
+
+    Attributes:
+        model_name (str): Name of the language model to use
+        model (BaseChatModel): The language model instance
+        vectorstore_retriever (Tool): Vector store retrieval tool if configured
+        graph (StateGraph): The compiled workflow graph
+    """
+
     def __init__(
             self,
             model_name: str = "qwen",
             model: Optional[BaseChatModel] = None,
             vectorstore: Optional[VectorStoreRetriever] = None
     ):
+        """Initialize the workflow graph.
+
+        Args:
+            model_name: Name of the LLM to use. Defaults to "qwen".
+            model: Pre-initialized model instance. Optional.
+            vectorstore: Vector store retriever for document search. Optional.
+        """
         # Load model
         self.model_name = model_name
         if model is None:
@@ -40,7 +65,11 @@ class WorkflowGraph:
         self.build_graph()
 
     def build_model(self) -> None:
-        """Build the LLM model"""
+        """Initialize the language model.
+
+        Creates a new language model instance using the factory pattern,
+        wrapping it in ChatHuggingFace if needed.
+        """
         llm = llm_pipe_factory(self.model_name)
         if not isinstance(llm, BaseChatModel):
             self.model = ChatHuggingFace(llm=llm)
@@ -48,7 +77,16 @@ class WorkflowGraph:
             self.model = llm
 
     def build_graph(self) -> None:
-        """Build the graph of the agent"""
+        """Construct the workflow graph.
+
+        Creates and configures the workflow graph with:
+        - Memory-based checkpointing
+        - WebSearcher and Summarizer agents
+        - Tool nodes for search operations
+        - Conditional edges for workflow control
+        
+        Also generates and saves a visualization of the graph structure.
+        """
         memory = MemorySaver()
         graph_builder = StateGraph(MessagesState)
 
@@ -79,4 +117,9 @@ class WorkflowGraph:
         image.save("./assets/workflow-graph.png")
 
     def __call__(self):
+        """Make the workflow graph callable.
+        
+        Returns:
+            The compiled workflow graph ready for execution
+        """
         return self.graph
