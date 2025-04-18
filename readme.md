@@ -38,9 +38,10 @@ The system follows a modular architecture with several key components:
 - PDF processing and indexing
 
 ## Workflow Graph
-![](./assets/workflow-graph.png)
+![image](./docs/assets/workflow-graph.png)
 
 The workflow operates as follows:
+
 1. WebSearcher agent processes the user query
 2. Appropriate tools are selected and executed
 3. Results are passed to the Summarizer agent
@@ -79,5 +80,6 @@ The workflow operates as follows:
 ## Evaluation
 
 LLM generated content can be evaluated using:
+
 - **ROUGE scores** for summarization quality
 - **BLEU scores** for translation accuracy (Reminder: this repo does not have translation feature)
