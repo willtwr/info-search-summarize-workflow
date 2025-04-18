@@ -30,8 +30,7 @@ class Qwen(BaseLLMPipe):
         model = AutoModelForCausalLM.from_pretrained(
             "Qwen/Qwen2.5-3B-Instruct-AWQ", 
             device_map="cuda", 
-            torch_dtype=torch.float16,
-            trust_remote_code=True
+            torch_dtype=torch.bfloat16
         )
         tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2.5-3B-Instruct-AWQ")
         pipe = pipeline(

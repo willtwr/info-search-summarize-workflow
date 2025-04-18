@@ -21,6 +21,7 @@ class BaseLLMPipe(ABC):
         Calls build_pipe() which must be implemented by subclasses to set up
         their specific model pipeline configuration.
         """
+        self.pipe = None
         self.build_pipe()
 
     @abstractmethod
