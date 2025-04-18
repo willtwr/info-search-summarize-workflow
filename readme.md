@@ -64,7 +64,7 @@ The workflow operates as follows:
 
 ### Environment Setup
 - Ensure CUDA is properly configured for GPU acceleration
-- At least 8GB GPU memory recommended
+- At least 12GB GPU memory recommended
 - SSD storage recommended for vector database
 
 ## Usage
@@ -78,14 +78,6 @@ The workflow operates as follows:
 
 ## Evaluation
 
-The system can be evaluated using:
+LLM generated content can be evaluated using:
 - **ROUGE scores** for summarization quality
-- **BLEU scores** for translation accuracy (if needed)
-
-## Future Enhancements
-
-- [ ] Add support for more document formats
-- [ ] Implement trusted site whitelisting
-- [ ] Add source verification and fact-checking
-- [ ] Enhance summary customization options
-- [ ] Add multi-language support
+- **BLEU scores** for translation accuracy (Reminder: this repo does not have translation feature)
