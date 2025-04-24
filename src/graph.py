@@ -114,7 +114,7 @@ class WorkflowGraph:
         self.graph = graph_builder.compile(checkpointer=memory)
         print(self.graph.get_graph().draw_mermaid())
         image = Image.open(io.BytesIO(self.graph.get_graph().draw_mermaid_png()))
-        image.save("./assets/workflow-graph.png")
+        image.save("./docs/assets/workflow-graph.png")
 
     def __call__(self):
         """Make the workflow graph callable.
