@@ -1,12 +1,12 @@
 gradio==5.21.0
 langgraph==0.3.10
-langchain== 0.3.20
+langchain==0.3.24
 langchain-huggingface==0.1.2
-accelerate==1.5.2
-autoawq==0.2.8
+accelerate==1.6.0
+autoawq @ git+https://github.com/casper-hansen/AutoAWQ.git
 tiktoken==0.9.0
 chromadb==0.6.3
-langchain-chroma==0.2.2
+langchain-chroma==0.2.3
 beautifulsoup4==4.13.3
 duckduckgo-search==7.5.2
 docling==2.30.0
