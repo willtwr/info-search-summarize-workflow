@@ -27,7 +27,7 @@ The system follows a modular architecture with several key components:
 
 ### Models
 - **Language Models**:
-  - Qwen 2.5 (3B params) with AWQ quantization
+  - Qwen 2.5 (3B params) with AWQ quantization (default)
   - SmolLM2 (1.7B params) for efficient processing
 - **Embedding Model**:
   - Stella EN 1.5B v5 for document vectorization
@@ -60,8 +60,8 @@ The workflow operates as follows:
    pip install -r requirements.txt
    ```
 3. Install Chrome and ChromeDriver:
-   - Linux: Download ChromeDriver from [Google Chrome for Testing](https://googlechromelabs.github.io/chrome-for-testing/)
-   - Copy chromedriver to /usr/bin/
+   - Download ChromeDriver from [Google Chrome for Testing](https://googlechromelabs.github.io/chrome-for-testing/)
+   - Linux: Copy chromedriver to /usr/bin/
 
 ### Environment Setup
 - Ensure CUDA is properly configured for GPU acceleration
@@ -82,4 +82,4 @@ The workflow operates as follows:
 LLM generated content can be evaluated using:
 
 - **ROUGE scores** for summarization quality
-- **BLEU scores** for translation accuracy (Reminder: this repo does not have translation feature)
+- **BLEU scores** for translation accuracy (note: this repo does not have translation feature)
