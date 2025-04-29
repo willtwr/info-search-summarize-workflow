@@ -110,15 +110,17 @@ with gr.Blocks() as demo:
 
             with gr.Row():
                 with gr.Column(scale=1):
-                    filebox = gr.File()
-                    upload_button = gr.UploadButton("Upload a PDF file", file_count="single", size="sm")
+                    filebox_vectordb = gr.File()
+                    upload_button_vectordb = gr.UploadButton("Upload a PDF file", file_count="single", size="sm")
                 
                 msg = gr.Textbox(placeholder="Type your message here...", submit_btn=True, lines=1, max_lines=2, scale=9)
 
         with gr.Column():
             md = gr.Markdown("Content here...", container=True, height="75vh", max_height="75vh")
+            upload_button_tempfile = gr.UploadButton("Upload a PDF file", file_count="single", size="sm")
 
-    upload_button.upload(upload_document, [upload_button], [filebox], show_progress_on=filebox)
+    upload_button_vectordb.upload(upload_document, [upload_button_vectordb], [filebox_vectordb], show_progress_on=filebox_vectordb)
+    upload_button_tempfile.upload(lambda x: read_pdf(x.name, return_string=True), [upload_button_tempfile], [md])
     msg.submit(stream_user_message, [msg, chat], [msg, chat], queue=False).then(stream_chat_graph_updates, [chat, md], [chat, md])
 
 
