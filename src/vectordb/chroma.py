@@ -5,9 +5,6 @@ from langchain_core.vectorstores import VectorStoreRetriever
 from langchain_chroma import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from models.text_embedding.stella import Stella
-from docling.document_converter import DocumentConverter, PdfFormatOption
-from docling.datamodel.pipeline_options import PdfPipelineOptions
-from docling.datamodel.base_models import InputFormat
 
 
 class ChromaVectorStore:
@@ -71,45 +68,6 @@ class ChromaVectorStore:
         """
         return self.text_splitter.split_documents(docs)
     
-    def read_pdf(self, path: str) -> List[Document]:
-        """Read a PDF file and convert it to a list of documents.
-
-        Each page of the PDF is converted to a Document object with appropriate metadata.
-
-        Args:
-            path: Path to the PDF file
-
-        Returns:
-            List of Document objects, one per page
-        """
-        pipeline_options = PdfPipelineOptions()
-        pipeline_options.generate_page_images = True
-        pipeline_options.generate_picture_images = True
-        converter = DocumentConverter(
-            format_options={
-                InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
-            }
-        )
-        converted_doc = converter.convert(path)
-        md = converted_doc.document.export_to_markdown(page_break_placeholder="<!-- page break -->")
-        md_remove_img = md.replace("<!-- image -->\n\n", "")
-        md_split = [pg.strip() for pg in md_remove_img.split("<!-- page break -->\n\n")]
-
-        content = []
-        for i, page in enumerate(md_split):
-            #TODO: Add last 128 tokens/words from previous page to the beginning of current page.
-            content.append(
-                Document(
-                    page_content=page.encode("utf-8"),
-                    metadata={
-                        "source": path,
-                        "page": i
-                    }
-                )
-            )
-        
-        return content
-
     def add_documents(self, docs: List[Document]) -> None:
         """Add documents to the vector store.
 

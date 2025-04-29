@@ -14,6 +14,7 @@ import uuid
 import gradio as gr
 from graph import WorkflowGraph
 from vectordb.chroma import ChromaVectorStore
+from utils import read_pdf
 
 
 config = {
@@ -92,7 +93,7 @@ def upload_document(uploaded_file: gr.UploadButton, progress=gr.Progress()):
         The uploaded file information for display
     """
     progress(0, desc="Reading document...")
-    doc = vectordb.read_pdf(uploaded_file.name)
+    doc = read_pdf(uploaded_file.name)
     progress(0.2, desc="Uploading document...")
     vectordb.add_documents(doc)
     progress(1, desc="Document uploaded successfully.")
