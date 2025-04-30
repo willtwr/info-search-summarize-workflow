@@ -13,8 +13,10 @@ The interface allows users to:
 import uuid
 import gradio as gr
 from graph import WorkflowGraph
+from agents.invoice_data_extractor.invoice_data_extractor import InvoiceDataExtractorAgent
 from vectordb.chroma import ChromaVectorStore
 from utils import read_pdf
+import json
 
 
 config = {
@@ -30,6 +32,7 @@ if gr.NO_RELOAD:
 
     # Load the workflow graph with Qwen model and vector store retriever
     workflow = WorkflowGraph(model_name="qwen", vectorstore=vectordb.get_retriever())
+    invoice_agent = InvoiceDataExtractorAgent(model=workflow.model)
 
 
 def stream_chat_graph_updates(chat_history: list, markdown_box: str):
@@ -100,6 +103,13 @@ def upload_document(uploaded_file: gr.UploadButton, progress=gr.Progress()):
     return uploaded_file
 
 
+def read_invoice(uploaded_file: gr.UploadButton, chat_history: list):
+    doc = read_pdf(uploaded_file.name, return_string=True)
+    response = invoice_agent.invoke({"messages": [{"role": "user", "content": doc}]})
+    chat_history.append({"role": "assistant", "content": json.dumps(json.loads(response["messages"][-1].content), indent=4)})
+    return chat_history, doc
+
+
 with gr.Blocks() as demo:
     with gr.Row():
         gr.Label("Bot")
@@ -120,7 +130,7 @@ with gr.Blocks() as demo:
             upload_button_tempfile = gr.UploadButton("Upload a PDF file", file_count="single", size="sm")
 
     upload_button_vectordb.upload(upload_document, [upload_button_vectordb], [filebox_vectordb], show_progress_on=filebox_vectordb)
-    upload_button_tempfile.upload(lambda x: read_pdf(x.name, return_string=True), [upload_button_tempfile], [md])
+    upload_button_tempfile.upload(read_invoice, [upload_button_tempfile, chat], [chat, md])
     msg.submit(stream_user_message, [msg, chat], [msg, chat], queue=False).then(stream_chat_graph_updates, [chat, md], [chat, md])
 
 
