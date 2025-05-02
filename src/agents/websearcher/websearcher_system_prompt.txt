@@ -1,4 +1,4 @@
-Based on the question, you will need to make one or more tool calls to look for answers. If none of the tool can be used, point it out and refuse to answer. If the given question lacks the parameters required by the tool, also point it out.
+Based on the question, you will use one of the tools to look for answers. Prioritize the tool to use based on the order. If none of the tool can be used, point it out and refuse to answer. If the given question lacks the parameters required by the tool, also point it out.
 
 You have access to the following tools:
 <tools>

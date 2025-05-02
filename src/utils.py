@@ -1,9 +1,11 @@
+import re
 from typing import List, Union
 from langchain_core.documents import Document
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.datamodel.base_models import InputFormat
 from docling_core.types.doc.document import ContentLayer
+
 
 def read_pdf(path: str, return_string: bool = False) -> Union[List[Document], str]:
     """Read a PDF file and convert it to a list of documents.
@@ -46,3 +48,17 @@ def read_pdf(path: str, return_string: bool = False) -> Union[List[Document], st
         )
     
     return content
+
+
+def remove_think(text: str) -> str:
+    """Remove <think> tags from the text.
+
+    Args:
+        text: The input text with <think> tags
+
+    Returns:
+        The text without <think> tags
+    """
+    pattern = r"<think>(?s:.)*?</think>"
+    text = re.sub(pattern, '', text).strip()
+    return text

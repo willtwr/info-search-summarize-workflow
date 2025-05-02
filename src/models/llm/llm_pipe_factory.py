@@ -1,11 +1,13 @@
 from .smollm2 import SmolLM2
 from .qwen import Qwen
+from .qwen3 import Qwen3
 
 
 # define models here
 models = {
     "smollm2": SmolLM2,
-    "qwen": Qwen
+    "qwen": Qwen,
+    "qwen3": Qwen3
 }
 
 
@@ -16,6 +18,7 @@ def llm_pipe_factory(model_name="qwen"):
     model pipelines based on the requested model name. Currently supports:
     - SmolLM2: A 1.7B parameter instruction-tuned model
     - Qwen: A 3B parameter instruction-tuned model with AWQ quantization
+    - Qwen3: A 1.7/4B parameter instruction-tuned model (some with AWQ quantization)
 
     Args:
         model_name (str, optional): Name of the model to instantiate. Defaults to "qwen".

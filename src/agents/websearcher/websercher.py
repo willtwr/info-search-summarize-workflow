@@ -1,6 +1,7 @@
 import os
 import json
 import uuid
+from utils import remove_think
 from agents.base_agent import BaseAgent
 from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
 from langgraph.graph import MessagesState
@@ -71,9 +72,14 @@ class WebSearcherAgent(BaseAgent):
         """
         messages = [SystemMessage(self.sys_prompt)] + [msg for msg in state["messages"] if isinstance(msg, (HumanMessage, AIMessage))]
         output = {"messages": [self.model.invoke(messages)]}
-        if output["messages"][-1].content.startswith('<tool_call>'):
-            contents = output["messages"][-1].content.replace('<tool_call>', '').replace('</tool_call>', '').strip()
+        contents = output["messages"][-1].content
+        contents = remove_think(contents)
+        if contents.startswith('<tool_call>'):
+            contents = contents.replace('<tool_call>', '').replace('</tool_call>', '').strip()
             contents = json.loads(contents)
+            if not isinstance(contents, list):
+                contents = [contents]
+            
             output = {"messages": [AIMessage(content="", tool_calls=[{"name": content["name"], "args": content["arguments"], "type": "tool_call", "id": str(uuid.uuid4())} for content in contents])]}
 
         return output

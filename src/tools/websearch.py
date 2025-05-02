@@ -12,13 +12,6 @@ def web_search(query: str) -> str:
     This tool uses DuckDuckGo to search the web and retrieves content from matching
     pages using Selenium. It processes the content to extract meaningful text while
     filtering out short or irrelevant sections.
-
-    Args:
-        query: The search query to execute
-
-    Returns:
-        str: Concatenated content from relevant search results, with each result
-             prefixed by its title
     """
     with DDGS() as ddgs:
         results = ddgs.text(query, max_results=10)

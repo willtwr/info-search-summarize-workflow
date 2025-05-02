@@ -4,6 +4,7 @@ from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langgraph.graph import MessagesState
+from utils import remove_think
 
 
 class SummarizerAgent(BaseAgent):
@@ -64,4 +65,5 @@ class SummarizerAgent(BaseAgent):
 
         # Run
         response = summarize_chain.invoke({"context": docs, "question": question})
+        response = remove_think(response)
         return {"messages": [AIMessage(content=response)]}

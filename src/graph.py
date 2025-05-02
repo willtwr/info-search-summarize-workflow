@@ -97,7 +97,7 @@ class WorkflowGraph:
         # tools
         tools = [news_search, web_search]
         if self.vectorstore_retriever:
-            tools.append(self.vectorstore_retriever)
+            tools = [self.vectorstore_retriever] + tools
 
         tool_node = ToolNode(tools=tools)
         websearcher_agent.bind_tools(tools)

@@ -18,7 +18,11 @@ def build_my_budget_retriever(retriever: VectorStoreRetriever) -> Tool:
     """
     vector_store_retriever = create_retriever_tool(
         retriever,
-        name="malaysia_budget_data_retriever",
-        description="Tool for retrieving data regarding Malaysia's budget allocations, spending, subsidies, etc.",
+        name="malaysia_budget_2025_vectordb",
+        description="""VectorDB retriever for Malaysia's budget 2025.
+        
+        This tool retrieves data regarding Malaysia's budget allocations, spending, subsidies, 
+        and other economic data in 2025.
+        """,
     )
     return vector_store_retriever

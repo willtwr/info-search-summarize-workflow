@@ -15,7 +15,7 @@ import gradio as gr
 from graph import WorkflowGraph
 from agents.invoice_data_extractor.invoice_data_extractor import InvoiceDataExtractorAgent
 from vectordb.chroma import ChromaVectorStore
-from utils import read_pdf
+from utils import read_pdf, remove_think
 import json
 
 
@@ -31,7 +31,7 @@ if gr.NO_RELOAD:
     vectordb = ChromaVectorStore()
 
     # Load the workflow graph with Qwen model and vector store retriever
-    workflow = WorkflowGraph(model_name="qwen", vectorstore=vectordb.get_retriever())
+    workflow = WorkflowGraph(model_name="qwen3", vectorstore=vectordb.get_retriever())
     invoice_agent = InvoiceDataExtractorAgent(model=workflow.model)
 
 
@@ -106,7 +106,9 @@ def upload_document(uploaded_file: gr.UploadButton, progress=gr.Progress()):
 def read_invoice(uploaded_file: gr.UploadButton, chat_history: list):
     doc = read_pdf(uploaded_file.name, return_string=True)
     response = invoice_agent.invoke({"messages": [{"role": "user", "content": doc}]})
-    chat_history.append({"role": "assistant", "content": json.dumps(json.loads(response["messages"][-1].content), indent=4)})
+    content = response["messages"][-1].content
+    content = remove_think(content)
+    chat_history.append({"role": "assistant", "content": json.dumps(json.loads(content), indent=4)})
     return chat_history, doc
 
 
