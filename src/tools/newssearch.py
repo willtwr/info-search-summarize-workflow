@@ -13,7 +13,7 @@ def news_search(query: str) -> str:
     It processes each result using Selenium to extract the full article text while
     filtering out short or irrelevant content.
     """
-    with DDGS() as ddgs:
+    with DDGS(timeout=20) as ddgs:
         results = ddgs.news(query, max_results=10)
 
     output = []

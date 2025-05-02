@@ -13,7 +13,7 @@ def web_search(query: str) -> str:
     pages using Selenium. It processes the content to extract meaningful text while
     filtering out short or irrelevant sections.
     """
-    with DDGS() as ddgs:
+    with DDGS(timeout=20) as ddgs:
         results = ddgs.text(query, max_results=10)
 
     output = []
