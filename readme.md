@@ -16,6 +16,7 @@ document search, and intelligent summarization capabilities.
 - **Vector Store Integration**: Efficient document indexing and similarity search
 - **Intelligent Summarization**: Context-aware, focused summaries (100-250 words)
 - **Streaming Updates**: Real-time response streaming in the UI
+- **Invoice Reading**: Extract data from uploaded invoice
 
 ## Architecture
 
@@ -27,7 +28,8 @@ The system follows a modular architecture with several key components:
 
 ### Models
 - **Language Models**:
-  - Qwen 2.5 (3B params) with AWQ quantization (default)
+  - Qwen 3 (1.7/4B params) AWQ quantization available (default)
+  - Qwen 2.5 (3B params) with AWQ quantization
   - SmolLM2 (1.7B params) for efficient processing
 - **Embedding Model**:
   - Stella EN 1.5B v5 for document vectorization
