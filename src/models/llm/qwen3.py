@@ -27,25 +27,23 @@ class Qwen3(BaseLLMPipe):
         - Extended maximum sequence length of 4096 tokens
         - Trust remote code enabled for model-specific optimizations
         """
+        model_name = "thewimo/Qwen3-4B-AWQ"
         model = AutoModelForCausalLM.from_pretrained(
-            # "thewimo/Qwen3-4B-AWQ",
-            # "Orion-zhen/Qwen3-1.7B-AWQ",
-            "Qwen/Qwen3-1.7B",
+            model_name,
             device_map="cuda",
-            # torch_dtype=torch.float16
-            torch_dtype=torch.bfloat16
+            torch_dtype=torch.float16
         )
-        # tokenizer = AutoTokenizer.from_pretrained("thewimo/Qwen3-4B-AWQ")
-        # tokenizer = AutoTokenizer.from_pretrained("Orion-zhen/Qwen3-1.7B-AWQ")
-        tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3-1.7B")
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
         pipe = pipeline(
             "text-generation",
             model=model,
             tokenizer=tokenizer,
-            max_new_tokens=4096,
+            max_new_tokens=8192,
             repetition_penalty=1.05,
             do_sample=False,
-            temperature=0.0,
+            temperature=None,
+            top_p=None,
+            top_k=None,
             return_full_text=False
         )
         self.pipe = HuggingFacePipeline(pipeline=pipe)

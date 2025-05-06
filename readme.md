@@ -67,7 +67,7 @@ The workflow operates as follows:
 
 ### Environment Setup
 - Ensure CUDA is properly configured for GPU acceleration
-- At least 12GB GPU memory recommended
+- At least 15GB GPU memory recommended
 - SSD storage recommended for vector database
 
 ## Usage

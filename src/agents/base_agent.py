@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Optional
 from models.llm.llm_pipe_factory import llm_pipe_factory
 from langchain_huggingface import ChatHuggingFace
+from langchain_core.prompts import PromptTemplate
 from langchain_core.language_models import BaseChatModel
 from langgraph.graph import MessagesState
 
@@ -17,7 +18,7 @@ class BaseAgent(ABC):
         model_name (str): Name of the language model to use
         model (BaseChatModel): The underlying language model instance
         sysprompt_path (str): Path to the system prompt file
-        sys_prompt (str): The loaded system prompt
+        thinking_mode (bool): Flag to indicate if use thinking mode
 
     Args:
         model_name (str, optional): Name of the model to use. Defaults to "qwen".
@@ -28,8 +29,22 @@ class BaseAgent(ABC):
             self,
             model_name: str = "qwen",
             model: Optional[BaseChatModel] = None,
-            sysprompt_path: Optional[str] = None
+            sysprompt_path: Optional[str] = None,
+            thinking_mode: bool = False
     ):
+        # Load system prompt
+        self.sysprompt_path = sysprompt_path
+        self.sys_prompt = None
+        self.load_system_prompt()
+
+        if not thinking_mode:
+            if isinstance(self.sys_prompt, str):
+                self.sys_prompt = self.sys_prompt + "\n\n/no_think"
+            elif isinstance(self.sys_prompt, PromptTemplate):
+                self.sys_prompt.template = self.sys_prompt.template + "\n\n/no_think"
+            else:
+                raise ValueError("Either invalid system prompt type or system prompt not initialized. Must be str or PromptTemplate.")
+
         # Model initialization
         if model is None:
             self.model_name = model_name
@@ -37,10 +52,6 @@ class BaseAgent(ABC):
         else:
             self.model_name = None
             self.model = model
-
-        # Load system prompt
-        self.sysprompt_path = sysprompt_path
-        self.load_system_prompt()
 
     @abstractmethod
     def load_system_prompt(self) -> None:
