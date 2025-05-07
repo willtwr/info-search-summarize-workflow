@@ -1,4 +1,4 @@
-gradio==5.21.0
+gradio==5.29.0
 langgraph==0.3.10
 langchain==0.3.24
 langchain-huggingface==0.1.2
@@ -8,6 +8,7 @@ tiktoken==0.9.0
 chromadb==0.6.3
 langchain-chroma==0.2.3
 beautifulsoup4==4.13.3
+selenium==4.30.0
 duckduckgo-search==8.0.1
 docling==2.31.0
 pymupdf==1.25.5

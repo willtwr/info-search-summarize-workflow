@@ -56,7 +56,6 @@ class WebSearcherAgent(BaseAgent):
 
         tools_str = "[" + ','.join([json.dumps(func) for func in functions]) + "]"
         self.sys_prompt = self.sys_prompt.replace("{tools}", tools_str)
-        print(self.sys_prompt)
         
     def invoke(self, state: MessagesState) -> dict:
         """Process the current conversation state and determine next actions.
