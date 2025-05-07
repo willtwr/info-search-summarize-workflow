@@ -3,6 +3,11 @@
 A comprehensive system for information retrieval and summarization that combines web search,
 document search, and intelligent summarization capabilities.
 
+## My Takeaway
+- Use well-defined workflow instead
+  - Agentic approach and tool calling are still very unreliable.
+- Understand business logic / human task workflow -> identify steps that can leverage IT -> define IT workflow -> identify steps in IT that can leverage ML / AI
+
 ## Features
 
 ### Search Capabilities
@@ -28,7 +33,7 @@ The system follows a modular architecture with several key components:
 
 ### Models
 - **Language Models**:
-  - Qwen 3 (1.7/4B params) AWQ quantization available (default)
+  - Qwen 3 (4B params) with AWQ quantization (default)
   - Qwen 2.5 (3B params) with AWQ quantization
   - SmolLM2 (1.7B params) for efficient processing
 - **Embedding Model**:
