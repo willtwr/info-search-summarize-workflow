@@ -1,27 +1,29 @@
-# Information Searching & Summarization Workflow
+# Information Retrieval & Summarization Workflow
 
-A comprehensive system for information retrieval and summarization that combines web search,
-document search, and intelligent summarization capabilities.
+A simple system for information retrieval and summarization from the internet, vector database, and uploaded file.
 
 ## My Takeaway
 - Use well-defined workflow instead
-  - Agentic approach and tool calling are still very unreliable.
-- Understand business logic / human task workflow -> identify steps that can leverage IT -> define IT workflow -> identify steps in IT that can leverage ML / AI
+  - Agentic approach and tools calling are still very unreliable.
+- Identify realistic use case first
+  - Understand business logic / human task workflow -> identify steps that can leverage IT -> define IT workflow -> identify steps in IT that require ML / AI for better accuracy
+- LLM is quite nice for docstring and documentation generation
+  - generate first draft -> modify / improve / update when necessary
 
 ## Features
 
-### Search Capabilities
-- **Web Search**: General web information retrieval using DuckDuckGo
-- **News Search**: Current events and news article search
-- **Document Search**: RAG-based local document search with vector store backend
-- **File Upload**: Support for reading and indexing PDF documents
+### Sources
+- **Internet**: General web information retrieval using DuckDuckGo
+- **News Website**: News article search using DuckDuckGo
+- **Vector Database**: RAG-based local document search
+- **File Upload**: Read and retrieve information from uploaded file (currently only support PDF invoice reading)
 
 ### Key Components
-- **Smart Search Routing**: Automatically selects the most appropriate search tool
+- **Smart Search Routing**: Automatically selects the most appropriate search tool via AI agent
 - **Vector Store Integration**: Efficient document indexing and similarity search
-- **Intelligent Summarization**: Context-aware, focused summaries (100-250 words)
-- **Streaming Updates**: Real-time response streaming in the UI
-- **Invoice Reading**: Extract data from uploaded invoice
+- **Intelligent Summarization**: Context-aware summarization (100-250 words)
+- **UI with Streaming Updates**: Real-time response streaming in the UI
+- **Invoice Reading**: Extract data from uploaded invoice with Layout Detection + OCR + LLM
 
 ## Architecture
 
@@ -30,19 +32,21 @@ The system follows a modular architecture with several key components:
 ### Agents
 - **WebSearcher**: Interprets queries and coordinates search tool selection
 - **Summarizer**: Processes search results into coherent summaries
+- **Invoice Data Extractor**: Extract data from the structure-preserved OCR-ed invoice
 
 ### Models
 - **Language Models**:
   - Qwen 3 (4B params) with AWQ quantization (default)
   - Qwen 2.5 (3B params) with AWQ quantization
-  - SmolLM2 (1.7B params) for efficient processing
+  - SmolLM2 (1.7B params)
 - **Embedding Model**:
-  - Stella EN 1.5B v5 for document vectorization
+  - Stella EN 1.5B v5
 
 ### Tools
-- Web and news search via DuckDuckGo
-- Vector store retrieval for document search
-- PDF processing and indexing
+- Internet and news search via DuckDuckGo
+- Vector store retriever for document search
+  - Tweaked for retrieving Malaysia Budget 2025 information.
+  - Modify the description in the build_my_budget_retriever function in vector_store_retriever.py to accommodate for other type of documents.
 
 ## Workflow Graph
 ![image](./docs/assets/workflow-graph.png)
@@ -54,11 +58,13 @@ The workflow operates as follows:
 3. Results are passed to the Summarizer agent
 4. Final summary is presented to the user
 
+**Note**: Invoice data extraction has a separate workflow.
+
 ## Installation
 
 ### Prerequisites
 - Python 3.11 or higher
-- CUDA-capable GPU for model inference
+- CUDA-capable GPU (at least 12GB VRAM recommended)
 
 ### Setup
 1. Clone the repository
@@ -70,11 +76,6 @@ The workflow operates as follows:
    - Download ChromeDriver from [Google Chrome for Testing](https://googlechromelabs.github.io/chrome-for-testing/)
    - Linux: Copy chromedriver to /usr/bin/
 
-### Environment Setup
-- Ensure CUDA is properly configured for GPU acceleration
-- At least 15GB GPU memory recommended
-- SSD storage recommended for vector database
-
 ## Usage
 
 1. Start the application:
@@ -84,9 +85,44 @@ The workflow operates as follows:
 2. Access the web interface (default: http://localhost:7860)
 3. Upload documents or start chatting to search for information
 
+## Documentation
+
+1. Run:
+    ```bash
+    mkdocs serve
+    ```
+2. Access the documentation (default: http://localhost:8000)
+
 ## Evaluation
 
-LLM generated content can be evaluated using:
+Not included in this repository but can be used as reference.
 
-- **ROUGE scores** for summarization quality
-- **BLEU scores** for translation accuracy (note: this repo does not have translation feature)
+### LLM generated content can be evaluated using:
+
+- **ROUGE scores**
+  - A type of statistical method
+  - Suitable for assessing the summarization quality
+  - Not 100% reliable but good enough as an indicator with other metrics
+- **BLEU scores**
+  - A type of statistical method
+  - Suitable for translation accuracy (note: this repo does not have translation feature)
+  - Again, not 100% reliable but good enough as an indicator with other metrics
+- **LLM as a judge**
+  - Use a different LLM to give score on the quality of the generated content.
+  - Not really reliable too.
+- **Human Evaluation**
+  - A more reliable approach, recommend to have a team of domain expert for evaluation.
+
+**Note**: Recommeded approach
+  1. Use statistical method and/or LLM as a judge as indicator during model improvement and tweaking.
+  2. Once satisfied with the outcome, perform human evaluation.
+  3. If not good enough, repeat from step 1. Else, finalize the model.
+
+### Invoice data extraction
+
+- **Precision**
+  - Useful for measuring how many of the detection are wrong.
+- **Recall**
+  - Useful for measuring how many data are not detected.
+- **F-1 Score**
+  - Useful for measuring overall performance.

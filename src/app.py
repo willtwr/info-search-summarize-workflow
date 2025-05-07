@@ -123,13 +123,13 @@ with gr.Blocks() as demo:
             with gr.Row():
                 with gr.Column(scale=1):
                     filebox_vectordb = gr.File()
-                    upload_button_vectordb = gr.UploadButton("Upload a PDF file", file_count="single", size="sm")
+                    upload_button_vectordb = gr.UploadButton("Upload file to VectorDB", file_count="single", size="sm")
                 
                 msg = gr.Textbox(placeholder="Type your message here...", submit_btn=True, lines=1, max_lines=2, scale=9)
 
         with gr.Column():
             md = gr.Markdown("Content here...", container=True, height="75vh", max_height="75vh")
-            upload_button_tempfile = gr.UploadButton("Upload a PDF file", file_count="single", size="sm")
+            upload_button_tempfile = gr.UploadButton("Upload an invoice", file_count="single", size="sm")
 
     upload_button_vectordb.upload(upload_document, [upload_button_vectordb], [filebox_vectordb], show_progress_on=filebox_vectordb)
     upload_button_tempfile.upload(read_invoice, [upload_button_tempfile, chat], [chat, md])
