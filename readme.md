@@ -9,6 +9,9 @@ A simple system for information retrieval and summarization from the internet, v
   - Understand business logic / human task workflow -> identify steps that can leverage IT -> define IT workflow -> identify steps in IT that require ML / AI for better accuracy
 - LLM is quite nice for docstring and documentation generation
   - generate draft -> verify and modify -> confirm changes -> update when necessary
+- Chatbot is anti-pattern for most use cases
+  - A well-designed GUI is more effective for those use cases.
+  - Textbox helps certain use cases such that users can describe the context in more detail.
 
 ## Use Cases
 - Internet search + LLM
